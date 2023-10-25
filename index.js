@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const app = express();
 const port  =process.env.PORT || 5000;
 
@@ -41,6 +41,15 @@ async function run() {
        res.send(result);
     })
 
+    app.get('/cars/:id', async(req, res) => {
+      const id = req.params.id;
+      const query = {_id: new ObjectId(id)}
+      const result = await carCollection.findOne(query);
+      res.send(result);
+    })
+
+    
+    
 
     app.post('/cars', async (req, res)=>{
         const newCar = req.body;
@@ -48,6 +57,29 @@ async function run() {
         const result = await carCollection.insertOne(newCar);
         res.send(result);
     })
+
+
+    app.put('/cars/:id', async(req, res) => {
+      const id = req.params.id;
+      const filter = {_id: new ObjectId(id)}
+      const options = { upsert: true };
+      const updatedCar = req.body;
+      const car = {
+        $set: {
+          img: updatedCar.img, 
+          name: updatedCar.name, 
+          brandName: updatedCar.brandName, 
+          type: updatedCar.type, 
+          price: updatedCar.price, 
+          shortDescription: updatedCar.shortDescription, 
+          rating: updatedCar.rating,
+        }
+      }
+      const result = await carCollection.updateOne(filter, car, options);
+      res.send(result);
+    })
+
+   
     
 
 
