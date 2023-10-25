@@ -33,6 +33,7 @@ async function run() {
     
     
     const carCollection = client.db('carsDB').collection('cars');
+    const cartCollection = client.db('carsDB').collection('cart')
 
 
     app.get('/cars', async(req, res)=>{
@@ -56,6 +57,13 @@ async function run() {
         console.log(newCar);
         const result = await carCollection.insertOne(newCar);
         res.send(result);
+    })
+
+    app.post('/cart', async(req, res)=>{
+      const cartItem = req.body;
+      console.log(cartItem);
+      const result = await cartCollection.insertOne(cartItem);
+      res.send(result);
     })
 
 
