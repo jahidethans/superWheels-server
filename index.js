@@ -60,14 +60,12 @@ async function run() {
 
     app.post('/cars', async (req, res)=>{
         const newCar = req.body;
-        console.log(newCar);
         const result = await carCollection.insertOne(newCar);
         res.send(result);
     })
 
     app.post('/cart', async(req, res)=>{
       const cartItem = req.body;
-      console.log(cartItem);
       const result = await cartCollection.insertOne(cartItem);
       res.send(result);
     })
